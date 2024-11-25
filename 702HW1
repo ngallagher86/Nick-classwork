@@ -1,0 +1,67 @@
+#loading in packages for data manipulation and analysis
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+
+#Nicholas Gallagher
+
+#This function plots time series from ts object, matrix, and data frame inputs 
+#with more than one column.
+
+# Creating the function and defining
+myplot_gallagher <- function(data, title = "Time Series Plot", colors = NULL, plotmean = TRUE) 
+  #First, we will need to define exceptions to prevent invalid inputs, such as
+  #numeric vectors and derived formats thereof
+  #Throw error if numeric vector is provided, covers ts01
+  {
+  if (is.numeric(data) && is.vector(data)) {
+    stop("Error: Numeric vectors will not work with this function.")
+  }
+  #Throw error if ts object created from numeric vector is used as input, covers ts02
+  if (inherits(data, "ts") && ncol <2) {
+    stop("Error: time series objects created from numeric vectors are not valid input,
+         please use a time series object with ncol >1 or a dataframe/matrix")
+  }
+  #Throw error if single-column df is provided, covers ts03
+  if (is.data.frame(data) && ncol(data) <= 2) {
+    stop("Error: Please provide a dataframe with more than one numeric column")
+  }
+  # convert ts or matrix input to data frame
+  if (is.matrix(data) || inherits(data, "ts")) {
+    data <- as.data.frame(data)
+  }
+  
+  # omit NAs in data sets
+  data <- na.omit(data)
+  
+  # ggplot formatting and equating time with the row number (as in a time series)
+  ggdata <- data %>%
+    mutate(time = row_number()) %>%
+    pivot_longer(-time, names_to = "series", values_to = "value")
+  
+  # plotting the time series with the legend at the bottom and custom labels
+  p <- ggplot(ggdata, aes(x = time, y = value, color = series)) +
+    geom_line() +
+    labs(title = title, x = "Time", y = "Index") +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+  
+  # add mean line based on user input (plotmean=true)
+  if (plotmean) {
+    means <- ggdata %>%
+      group_by(time) %>%
+      summarize(mean_value = mean(value, na.rm = TRUE), .groups = 'drop')
+    
+    p <- p + 
+      geom_line(data = means, aes(x = time, y = mean_value), 
+                color = "black", linetype = "dashed", linewidth = 0.75) +
+      labs(color = "series", linetype = "mean") +
+      scale_linetype_manual(values = c("solid", "dashed")) #allows manual input
+      scale_color_manual(values = colors) #allows manual color input
+  }
+  
+  # print result
+  print(p)
+}
+# the last line of the file
