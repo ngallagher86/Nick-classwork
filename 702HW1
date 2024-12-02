@@ -46,6 +46,8 @@ myplot_gallagher <- function(data, title = "Time Series Plot", colors = NULL, pl
     labs(title = title, x = "Time", y = "Index") +
     theme_minimal() +
     theme(legend.position = "bottom")
+    polygon(c(value) r(index), c(index) r(value), col="blue")
+
   
   # add mean line based on user input (plotmean=true)
   if (plotmean) {
