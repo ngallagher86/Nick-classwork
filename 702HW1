@@ -27,10 +27,6 @@ myplot_gallagher <- function(data, title = "Time Series Plot", colors = NULL, pl
   if (is.data.frame(data) && ncol(data) <= 2) {
     stop("Error: Please provide a dataframe with more than one numeric column")
   }
-  # convert ts or matrix input to data frame
-  if (is.matrix(data) || inherits(data, "ts")) {
-    data <- as.data.frame(data)
-  }
   
   # omit NAs in data sets
   data <- na.omit(data)
