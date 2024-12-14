@@ -4,9 +4,10 @@ library(funtimes)
 
 
 library(funtimes)
+#### The primary improvements to the processing time of this function will focus on the bootstrapping loop, as these are quite resource-intense with large datasets.
+#### two 10.000 observation time series made with random values will be used as test data.
 
-
-dada2 <- function (x, y, lag.max = NULL, plot = c("Pearson", "Spearman", 
+pemo2 <- function (x, y, lag.max = NULL, plot = c("Pearson", "Spearman", 
                                                  "none"), level = 0.95, B = 1000, smooth = FALSE, cl = NULL, 
                   ...) 
 {
@@ -162,5 +163,5 @@ dada2 <- function (x, y, lag.max = NULL, plot = c("Pearson", "Spearman",
 
 
 system.time({
-  dada2(ts1, ts2)  # The function to be timed
+  pemo2(ts1, ts2)  # The function to be timed
 })
