@@ -1,9 +1,8 @@
 
 library(funtimes)
+library(data.frame)
+library(microbenchmark)
 
-
-
-library(funtimes)
 #### The primary improvements to the processing time of this function will focus on the bootstrapping loop, as these are quite resource-intense with large datasets.
 #### two 10.000 observation time series made with random values will be used as test data.
 
